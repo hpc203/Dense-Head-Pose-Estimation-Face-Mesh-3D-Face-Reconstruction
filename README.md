@@ -1,6 +1,7 @@
 # Dense-Head-Pose-Estimation-Face-Mesh-3D-Face-Reconstruction
-使用ONNXRuntime部署3D人脸重建，人脸Mesh，人头姿势估计，包含C++和Python两个版本的程序
-在本套程序里，包括人脸检测，人脸检测，人脸关键点检测，人头姿势估计，人脸网格Mesh生成，
+使用ONNXRuntime部署3D人脸重建，人脸Mesh，人头姿势估计，包含C++和Python两个版本的程序。
+
+在本套程序里，包括人脸检测，人脸关键点检测，人头姿势估计，人脸网格Mesh生成，
 3D人脸重建。其中3D人脸重建是本套程序里的重中之重。
 本套程序对应的paper是ECCV2020里的一篇文章《Towards Fast, Accurate and Stable 3D Dense Face Alignment》
 
