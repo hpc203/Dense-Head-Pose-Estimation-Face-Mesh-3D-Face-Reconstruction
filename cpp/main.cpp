@@ -124,8 +124,8 @@ vector<BoxInfo> Detect_Face::detect(Mat frame)
 	auto allocator_info = MemoryInfo::CreateCpu(OrtDeviceAllocator, OrtMemTypeCPU);
 	Value input_tensor_ = Value::CreateTensor<float>(allocator_info, input_image_.data(), input_image_.size(), input_shape_.data(), input_shape_.size());
 
-	// ¿ªÊ¼ÍÆÀí
-	vector<Value> ort_outputs = ort_session->Run(RunOptions{ nullptr }, &input_names[0], &input_tensor_, 1, output_names.data(), output_names.size());   // ¿ªÊ¼ÍÆÀí
+	// å¼€å§‹æ¨ç†
+	vector<Value> ort_outputs = ort_session->Run(RunOptions{ nullptr }, &input_names[0], &input_tensor_, 1, output_names.data(), output_names.size());   // å¼€å§‹æ¨ç†
 	
 	Ort::Value &predictions = ort_outputs.at(0);
 	auto pred_dims = predictions.GetTensorTypeAndShapeInfo().GetShape();
@@ -135,7 +135,7 @@ vector<BoxInfo> Detect_Face::detect(Mat frame)
 	vector<BoxInfo> bboxes;
 	int n = 0; ///batchno , classid , score , x1y1x2y2
 	const float* pdata = predictions.GetTensorMutableData<float>();
-	for (n = 0; n < this->num_proposal; n++)   ///ÌØÕ÷Í¼³ß¶È
+	for (n = 0; n < this->num_proposal; n++)   ///ç‰¹å¾å›¾å°ºåº¦
 	{
 		const float class_socre = pdata[2];
 		if (class_socre >= this->confThreshold)
@@ -157,7 +157,7 @@ class Face_Mesh
 public:
 	Face_Mesh(string mode);
 	void detect(Mat &frame, vector<BoxInfo> faces);
-	~Face_Mesh();  // ÕâÊÇÎö¹¹º¯Êı, ÊÍ·ÅÄÚ´æ
+	~Face_Mesh();  // è¿™æ˜¯ææ„å‡½æ•°, é‡Šæ”¾å†…å­˜
 private:
 	int inpWidth;
 	int inpHeight;
@@ -226,8 +226,8 @@ Face_Mesh::Face_Mesh(string mode)
 	const int len = this->ntri * 3;
 	this->triangles = new int[len];
 	FILE* fp = fopen("triangles.bin", "rb");
-	fread(triangles, sizeof(int), len, fp);//µ¼ÈëÊı¾İ
-	fclose(fp);//¹Ø±ÕÎÄ¼ş¡£
+	fread(triangles, sizeof(int), len, fp);//å¯¼å…¥æ•°æ®
+	fclose(fp);//å…³é—­æ–‡ä»¶ã€‚
 }
 
 Face_Mesh::~Face_Mesh()
@@ -240,7 +240,7 @@ void Face_Mesh::normalize_(vector<Mat> imgs)
 {
 	const int imgnum = imgs.size();
 	const int img_area = this->inpHeight * this->inpWidth;
-	this->input_image_.resize(imgnum * img_area * 3);   ////Ò²¿ÉÒÔÓÃopencvÀïµÄmergeº¯Êı
+	this->input_image_.resize(imgnum * img_area * 3);   ////ä¹Ÿå¯ä»¥ç”¨opencvé‡Œçš„mergeå‡½æ•°
 	for (int n = 0; n < imgnum; n++)
 	{
 		for (int c = 0; c < 3; c++)
@@ -295,8 +295,8 @@ void Face_Mesh::detect(Mat &frame, vector<BoxInfo> faces)
 		auto allocator_info = MemoryInfo::CreateCpu(OrtDeviceAllocator, OrtMemTypeCPU);
 		Value input_tensor_ = Value::CreateTensor<float>(allocator_info, input_image_.data(), input_image_.size(), input_shape_.data(), input_shape_.size());
 
-		// ¿ªÊ¼ÍÆÀí
-		vector<Value> ort_outputs = ort_session->Run(RunOptions{ nullptr }, &input_names[0], &input_tensor_, 1, output_names.data(), output_names.size());   // ¿ªÊ¼ÍÆÀí
+		// å¼€å§‹æ¨ç†
+		vector<Value> ort_outputs = ort_session->Run(RunOptions{ nullptr }, &input_names[0], &input_tensor_, 1, output_names.data(), output_names.size());   // å¼€å§‹æ¨ç†
 
 		auto camera_matrixes_dims = ort_outputs.at(0).GetTensorTypeAndShapeInfo().GetShape();
 		const int camera_matrixes_h = camera_matrixes_dims.at(1);
@@ -383,7 +383,7 @@ void Face_Mesh::detect(Mat &frame, vector<BoxInfo> faces)
 int main()
 {
 	Detect_Face detect_net(0.7);
-	Face_Mesh mesh_net("mesh");
+	Face_Mesh mesh_net("mesh");  ///choices=["pose", "sparse", "dense", "mesh"]
 
 	string imgpath = "images/4.jpg";
 	Mat srcimg = imread(imgpath);
